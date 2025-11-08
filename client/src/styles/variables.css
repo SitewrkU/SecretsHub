@@ -1,0 +1,18 @@
+:root{
+  --bg: #121117;
+  --bg-secondary: #3c364c;
+  --d-bg-secondary: #211e2a;
+
+  --text-color: #eeeeee;
+  --text-color-secondary: #bbbbbb;
+  --a-color: #a697d6;
+
+  --button-bg: #6d54b5;
+  --button-secondary-bg: #4a397b;
+  --warn-button-bg: #b54a4a;
+  --create-button-bg: #4b944a;
+  --star-button-bg: #ffd000;
+
+  --main-container: #18161f;
+  --log-container: #2a2735;
+}

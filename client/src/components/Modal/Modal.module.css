@@ -1,0 +1,88 @@
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  animation: overlayShow 0.15s ease-out;
+}
+
+.modalOverlay[data-state='closed'] {
+  animation: overlayHide 0.15s ease-in;
+}
+
+@keyframes overlayShow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlayHide {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.modalContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 750px;
+  max-height: 85vh;
+  background: var(--d-bg-secondary);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 38px rgba(0, 0, 0, 0.3);
+  animation: contentShow 0.2s ease-out;
+}
+
+.modalContent[data-state='closed'] {
+  animation: contentHide 0.2s ease-in;
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -52%) scale(0.96);
+  }
+}
+
+.modalTitle {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #c4c4c4;
+}
+
+
+.modalClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #888;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.modalClose:hover {
+  color: #d0d0d0;
+  background: hsl(0, 0%, 94%, 0.2);
+}

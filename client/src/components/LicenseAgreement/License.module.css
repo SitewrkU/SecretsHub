@@ -1,0 +1,78 @@
+.licensePageBackground {
+  background: #121117;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+
+.hLicense{
+  color: #97889e;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.effectiveDate{
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  color: #78648b;
+}
+
+
+.licenseContent{
+  padding: 20px;
+  color: #d5d5d5;
+  max-width: 800px;
+  margin: 0 auto;
+
+  .section{
+    margin-bottom: 2rem;
+
+    & h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      color: #e4e4e4;
+    }
+    & h3 {
+      font-size: 1.15rem;
+      margin-top: 0.75rem;
+      margin-bottom: 0.75rem;
+      color: #e0dfdf;
+    }
+
+    & p {
+      line-height: 1.6;
+      margin-bottom: 0.4rem;
+    }
+
+    strong {
+      color: #ebebeb;
+    }
+  }
+}
+
+ul, ol {
+  margin-left: 25px;
+  list-style-type: disc;
+  margin-bottom: 1rem;
+
+  & li{
+    margin-bottom: 4px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.subr{
+  padding-left: 20px; /* місце під "|" + відступ */
+  position: relative;
+  display: inline-block;
+
+  &::before{
+    content: "| ";
+    color: #555;
+    position: absolute;
+    left: 2px;
+  }
+}

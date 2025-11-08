@@ -1,0 +1,28 @@
+.navbar{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 50px 0;
+  .navButton{
+    background-color: transparent;
+    color: #8e80b8;
+    border: 2px solid #8e80b8;
+    padding: 10px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, scale 0.1s;
+    transition-timing-function: ease-in-out;
+    &:hover{
+      scale: 1.1;
+    }
+
+    &.active{
+      scale: 1.1;
+      background-color: var(--button-bg);
+      color: var(--button-bg);
+      border-color: var(--button-bg);
+      background-color: color-mix(in srgb, var(--button-bg) 10%, transparent);
+    }
+  }
+}
