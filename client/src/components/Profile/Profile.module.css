@@ -17,7 +17,7 @@
 
   .stats{
     padding-top: 10px;
-    background-color: #25212e;
+    background-color: hsl(0, 0%, 80%, 0.1);
     margin-bottom: 20px;
     gap: 10px;
     border-radius: 5px;

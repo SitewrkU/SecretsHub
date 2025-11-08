@@ -23,7 +23,7 @@ function App() {
       reverseOrder={false} 
       toastOptions={{
         style: {
-          background: '#1f1b2b', 
+          background: '#1c1b1eff', 
           color: '#fff',
           borderRadius: '32px',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
