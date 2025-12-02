@@ -77,7 +77,7 @@ router.post('/getRandom', authMiddleware, actionLimiter, async (req, res) => {
       : false;
 
     const hasReported = Array.isArray(randomSecret.reports) && randomSecret.reports.length > 0
-      ? randomSecret.reports.some(id => id.toString() === req.user._id.toString())
+      ? randomSecret.reports.some(report => report.userId.toString() === req.user._id.toString())
       : false;
 
     
@@ -169,14 +169,18 @@ router.post('/:id/report', authMiddleware, actionLimiter, async (req, res) => {
       return res.status(400).json({ message: 'Не можна репортити власний секрет' });
     }
 
-    if(secret.reports.some(id => id.toString() === userId.toString())){
+    if(secret.reports.some(report => report.userId.toString() === userId.toString())){
       return res.status(400).json({ message: 'Ви вже повідомили про цей секрет' });
     }
 
-
     const hasReported = secret.reports.some(id => id.toString() === userId.toString());
+    const user = await User.findById(userId);
+    const reportWeight = getUserReportWeight(user);
 
-    secret.reports.push(userId);
+    secret.reports.push({
+      userId: userId,
+      weight: reportWeight
+    });
     await secret.save();
 
     const author = await User.findById(secret.author);
@@ -189,7 +193,11 @@ router.post('/:id/report', authMiddleware, actionLimiter, async (req, res) => {
     if(shouldHide){
       secret.isActive = false;
       await secret.save();
-      console.log(`Секрет ${secretId} прихований: ${secret.reports.length} репортів, ${secret.stars.length} зірок`);
+
+      const totalWeight = secret.reports.reduce((sum, r) => sum + (r.weight || 1), 0);
+      console.log(`Секрет ${secretId} прихований: 
+        ${secret.reports.length} репортів (вага: ${totalWeight.toFixed(1)}), 
+        ${secret.stars.length} зірок (вага: ${((secret.stars.length)*1.5).toFixed(1)} )`);
     }
 
     res.json({
@@ -205,15 +213,47 @@ router.post('/:id/report', authMiddleware, actionLimiter, async (req, res) => {
   }
 });
 
+
+function getUserReportWeight(user) {
+  let weight = 1.0;
+
+  const day = (24 * 60 * 60 * 1000);
+  const accountAgeDays = (Date.now() - user.createdAt) / day;
+
+  if (accountAgeDays <= 3) weight -= 0.3;
+  if (accountAgeDays > 15) weight += 0.1;
+  if (accountAgeDays > 30) weight += 0.2;
+  if (accountAgeDays > 90) weight += 0.2;
+  
+  if (user.stats.totalStars > 20) weight += 0.1;
+  if (user.stats.totalStars > 50) weight += 0.2;
+  if (user.stats.totalStars > 100) weight += 0.2;
+  
+  if (user.stats.totalReports > 30) weight -= 0.1;
+  if (user.stats.totalReports > 50) weight -= 0.3;
+  
+  return Math.max(weight, 0.3);
+}
+
 function shouldHideSecret(secret) {
-  const reportCount = secret.reports.length;
+  const totalReportWeight = secret.reports.reduce((sum, report) => 
+    sum + (report.weight || 1), 0
+  );
   const starCount = secret.stars.length;
 
-  if (reportCount < 5) {
-    return false;
-  }
-  return reportCount > starCount * 1.5;
+  const baseThreshold = 5;
+  const popularityBonus = Math.floor(starCount / 20);
+  const requiredReports = baseThreshold + popularityBonus;
+
+  if (totalReportWeight < requiredReports) return false;
+
+  return totalReportWeight > starCount * 1.5;
 }
+
+
+
+
+
 
 
 router.get('/my', authMiddleware, async (req, res) => {
@@ -245,7 +285,7 @@ router.get('/leaderboard', async (req, res) => {
   try {
     const topUsers = await User.find()
       .sort({ 'stats.totalStars': -1 })
-      .limit(20)
+      .limit(30)
       .select('name stats.totalStars stats.totalSecrets')
       .lean();
 

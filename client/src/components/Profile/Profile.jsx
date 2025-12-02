@@ -1,7 +1,16 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
-import { User, Hash, Calendar, NotebookText, Star, TriangleAlert, LogOut, FilePlus2  } from "lucide-react"
+import { User, 
+  Hash, 
+  Calendar, 
+  NotebookText, 
+  Star, 
+  TriangleAlert, 
+  LogOut, 
+  FilePlus2,
+  BicepsFlexed,
+} from "lucide-react"
 import styles from './Profile.module.css'
 
 const Profile = ({ onOpenModal }) => {
@@ -46,11 +55,12 @@ const Profile = ({ onOpenModal }) => {
         )}
       </div>
 
-      <div className={[styles.defStats, styles.contentStats].join(' ')}>
+      <div className={`${styles.defStats} ${styles.contentStats} ${styles.defScroll}`}>
         <h2>Активність</h2>
         <p><NotebookText/> {user?.stats?.totalSecrets ?? 0}</p>
         <p><Star/> {user?.stats?.totalStars ?? 0}</p>
         <p><TriangleAlert/> {user?.stats?.totalReports ?? 0}</p>
+        <p><BicepsFlexed/> Вага репорту: {user ? getUserReportWeight(user) : '1.0'}</p>
       </div>
       </div>
 
@@ -65,6 +75,33 @@ const Profile = ({ onOpenModal }) => {
     </div>
     </>
   );
+}
+
+
+
+function getUserReportWeight(user) {
+  if (!user) return 1.0;
+  let weight = 1.0;
+
+  const day = (24 * 60 * 60 * 1000);
+  const createdAt = new Date(user.createdAt).getTime();
+  const accountAgeDays = (Date.now() - createdAt) / day;
+
+  const { totalStars = 0, totalReports = 0 } = user.stats || {};
+
+  if (accountAgeDays <= 3) weight -= 0.3;
+  if (accountAgeDays > 15) weight += 0.1;
+  if (accountAgeDays > 30) weight += 0.2;
+  if (accountAgeDays > 90) weight += 0.2;
+  
+  if (totalStars > 20) weight += 0.1;
+  if (totalStars > 50) weight += 0.2;
+  if (totalStars > 100) weight += 0.2;
+  
+  if (totalReports > 30) weight -= 0.1;
+  if (totalReports > 50) weight -= 0.3;
+  
+  return Math.max(weight, 0.3).toFixed(1);
 }
 
 export default Profile;

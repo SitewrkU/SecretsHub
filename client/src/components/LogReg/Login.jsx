@@ -63,6 +63,7 @@ const Login = () => {
           <input
             type={showPassword ? 'text' : 'password'}
             value={password}
+            maxLength="64" 
             placeholder="Пароль"
             onChange={(e) => setPassword(e.target.value)}
           />

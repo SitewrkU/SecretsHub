@@ -83,7 +83,7 @@ const RandomSecret = ({ secret, setSecret }) => {
       <div>
         <div className={styles.header}>
           <h1>
-            Шукати секрет...
+            Шукати секрети...
           </h1>
         </div>
 

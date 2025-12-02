@@ -40,11 +40,13 @@ const Leaderboard = () => {
       </div>
 
       { users ? (
-        <div className={styles.leaderboard}>
+        <div className={`${styles.leaderboard} ${styles.defScroll}`}>
           {users.map(user => (
 
             <div key={user.rank} className={styles.userItem}>
-              {user.rank} - {user.name} [{user.totalStars}]
+              <div className={styles.rank}>{user.rank}</div>
+              <div className={styles.name}>{user.name}</div>
+              <div className={styles.stars}>{user.totalStars}<Star/></div>
             </div>
 
           ))}

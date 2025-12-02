@@ -31,11 +31,9 @@ const secretSchema = new mongoose.Schema({
     default: []
   }],
   reports: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    default: []
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    weight: { type: Number, default: 1 },
   }],
-
   createdAt: {
     type: Date,
     default: Date.now,
